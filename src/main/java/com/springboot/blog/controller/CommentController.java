@@ -53,6 +53,7 @@ public class CommentController {
     public ResponseEntity<String> deleteComment(@PathVariable(name = "commentId") long id,
                                                 @PathVariable(name = "postId") Long postId) {
         commentService.deleteCommentById(id, postId);
+        System.out.println("Hii test my changes!!");
         return new ResponseEntity<String>("Data Deleted Sucessfully!!", HttpStatus.OK);
     }
 }
