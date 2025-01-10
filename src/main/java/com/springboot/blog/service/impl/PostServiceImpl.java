@@ -6,6 +6,7 @@ import com.springboot.blog.payloads.PostDto;
 import com.springboot.blog.payloads.PostResponse;
 import com.springboot.blog.repository.PostRepository;
 import com.springboot.blog.service.PostService;
+import jakarta.transaction.Transactional;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -64,7 +65,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePostById(long id) {
+    @Transactional
+    public void deletePostById(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", String.valueOf(id)));
         postRepository.delete(post);
     }
