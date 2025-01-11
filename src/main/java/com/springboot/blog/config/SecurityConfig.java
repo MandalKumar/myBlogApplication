@@ -43,12 +43,13 @@ public class SecurityConfig {
                 //authorize.anyRequest().authenticated()
 
                 //now we are giving permit by specifc uaser for specific operations
-                authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll().anyRequest().authenticated()
+                authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll().anyRequest().authenticated()
 
         ).httpBasic(Customizer.withDefaults());
         return httpSecurity.build();
     }
-/* Below i used In-Memory  Authentication thats why we define below userDetailsService() */
+    /* Below i used In-Memory  Authentication thats why we define below userDetailsService() */
 //    @Bean
 //    public UserDetailsService userDetailsService() {
 //        UserDetails user = User.builder().username("user")
