@@ -1,9 +1,9 @@
 package com.springboot.blog.controller;
 
+import com.springboot.blog.payloads.JwtAuthResponse;
 import com.springboot.blog.payloads.LoginDTO;
 import com.springboot.blog.payloads.RegisterDTO;
 import com.springboot.blog.service.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,8 +26,11 @@ public class AuthController {
      * Because user use some time login or some time signing so we are providing both facility
      * */
     @PostMapping(value = {"login", "signing"})
-    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
-        return new ResponseEntity<>(authService.login(loginDTO), HttpStatus.OK);
+    public ResponseEntity<JwtAuthResponse> login(@RequestBody LoginDTO loginDTO) {
+        String token = authService.login(loginDTO);
+        JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
+        jwtAuthResponse.setAccessToken(token);
+        return new ResponseEntity<>(jwtAuthResponse, HttpStatus.OK);
 
         //Build Register API
     }

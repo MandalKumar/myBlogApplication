@@ -7,8 +7,8 @@ import com.springboot.blog.payloads.LoginDTO;
 import com.springboot.blog.payloads.RegisterDTO;
 import com.springboot.blog.repository.RoleRepository;
 import com.springboot.blog.repository.UserRepository;
+import com.springboot.blog.security.JwtTokenProvider;
 import com.springboot.blog.service.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,27 +26,33 @@ public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+    private JwtTokenProvider jwtTokenProvider;
 
 
     public AuthServiceImpl(AuthenticationManager manager, UserRepository userRepository,
                            RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider) {
         this.manager = manager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
     public String login(LoginDTO loginDTO) {
         Authentication authentication = manager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDTO.getUserNameOrEmail(), loginDTO.getPassword()));
+        String token = null;
         try {
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            token = jwtTokenProvider.generateToken(authentication);
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
-        return "User Logged-in Sucessfully !!";
+//        return "User Logged-in Sucessfully !!";
+        return token;
     }
 
     @Override
