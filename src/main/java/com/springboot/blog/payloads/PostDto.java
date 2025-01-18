@@ -25,6 +25,8 @@ public class PostDto {
     @NotEmpty
     private String content;
 
+    private Long categoryId;
+
     public Long getId() {
         return id;
     }
@@ -55,5 +57,13 @@ public class PostDto {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 }
