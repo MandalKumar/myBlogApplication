@@ -1,5 +1,6 @@
 package com.springboot.blog.payloads;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -10,21 +11,35 @@ import lombok.NoArgsConstructor;
 //@Data
 //@AllArgsConstructor
 //@NoArgsConstructor
+@Schema(
+        description = "PostDTO Model Information"
+)
 public class PostDto {
     private Long id;
     // title should not be null  or empty
     // title should have at least 3 characters
+    @Schema(
+            description = "Blog post title"
+    )
     @NotEmpty
     @Size(min = 3, message = "Post title should have at least 3 characters")
     private String title;
     // post description should be not null or empty
     // post description should have at least 10 characters
+    @Schema(
+            description = "Blog post Description"
+    )
     @NotEmpty
     @Size(min = 10, message = "Post description should have at least 10 characters")
     private String description;
+    @Schema(
+            description = "Blog post content"
+    )
     @NotEmpty
     private String content;
-
+    @Schema(
+            description = "Blog post categoryId"
+    )
     private Long categoryId;
 
     public Long getId() {

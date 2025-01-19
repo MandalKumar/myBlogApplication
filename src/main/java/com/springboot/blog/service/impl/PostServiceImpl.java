@@ -98,7 +98,7 @@ public class PostServiceImpl implements PostService {
         newPotDto.setContent(newPost.getContent());
         newPotDto.setDescription(newPost.getDescription());
         newPotDto.setTitle(newPost.getTitle());
-        newPotDto.setCategoryId(newPost.getCategory().getId());
+        newPotDto.setCategoryId(null != newPost.getCategory() ? newPost.getCategory().getId() : null);
         return newPotDto;
     }
 
