@@ -3,6 +3,7 @@ package com.springboot.blog.service.impl;
 import com.springboot.blog.entity.Category;
 import com.springboot.blog.entity.Post;
 import com.springboot.blog.exception.ResourceNotFoundException;
+import com.springboot.blog.payloads.CommentDTO;
 import com.springboot.blog.payloads.PostDto;
 import com.springboot.blog.payloads.PostResponse;
 import com.springboot.blog.repository.CategoryRepository;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,6 +58,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public PostDto getDataById(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", String.valueOf(id)));
         return convertResponsePostDto(post);
@@ -92,13 +95,26 @@ public class PostServiceImpl implements PostService {
     }
 
     private PostDto convertResponsePostDto(Post newPost) {
-        //Convert Entity to DTO
+        // Convert Entity to DTO
         PostDto newPotDto = new PostDto();
         newPotDto.setId(newPost.getId());
         newPotDto.setContent(newPost.getContent());
         newPotDto.setDescription(newPost.getDescription());
-        newPotDto.setTitle(newPost.getTitle());
         newPotDto.setCategoryId(null != newPost.getCategory() ? newPost.getCategory().getId() : null);
+        newPotDto.setTitle(newPost.getTitle()); // Convert comments if they are available
+        if (newPost.getComments() != null) {
+            Set<CommentDTO> commentDtos = newPost.getComments().stream().map(comment -> {
+                CommentDTO commentDto = new CommentDTO();
+                commentDto.setId(comment.getId());
+                commentDto.setName(comment.getName());
+                commentDto.setEmail(comment.getEmail());
+                commentDto.setCommentBody(comment.getCommentBody());
+                return commentDto;
+            }).collect(Collectors.toSet());
+            newPotDto.setComments(commentDtos);
+        } else {
+            newPotDto.setComments(null);
+        }
         return newPotDto;
     }
 

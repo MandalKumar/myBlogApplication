@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 //@Data
 //@AllArgsConstructor
 //@NoArgsConstructor
@@ -42,6 +44,8 @@ public class PostDto {
     )
     private Long categoryId;
 
+    private Set<CommentDTO> comments;
+
     public Long getId() {
         return id;
     }
@@ -72,6 +76,14 @@ public class PostDto {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Set<CommentDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<CommentDTO> comments) {
+        this.comments = comments;
     }
 
     public Long getCategoryId() {
